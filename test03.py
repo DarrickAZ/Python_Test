@@ -211,19 +211,49 @@ print(isinstance((x for x in range(10)),Iterator))
 
 
 
+###生成器Generator和yield的进一步说明
+# 要创建一个generator，有很多种方法。第一种方法很简单，只要把一个列表生成式
+# 的 []  改成 ()  ，就创建了一个generator：
+# >>> L = [x * x for x in range(10)]
+# >>> L
+# [0, 1, 4, 9, 16, 25, 36, 49, 64, 81]
+# >>> g = (x * x for x in range(10))
+# >>> g
+# <generator object <genexpr> at 0x1022ef630>
+# 创建 L  和 g  的区别仅在于最外层的 []  和 ()  ， L  是一个list，而 g  是一个
+# generator。
+# 我们可以直接打印出list的每一个元素，但我们怎么打印出generator的每一个元素
+# 呢？
+# 如果要一个一个打印出来，可以通过 next()  函数获得generator的下一个返回
+print('#############################################################')
+def fib(max):
+    n, a, b = 0, 0, 1
+    while n < max:
+        #yield b
+        print(b)
+        a, b = b, a + b
+        n = n + 1
+    return 'done'
+#
+print(fib(2))
 
-
-
-
-
-
-
-
-
-
-
-
-
+def fibG(max):
+    n, a, b = 0, 0, 1
+    while n < max:
+        yield b
+        a, b = b, a + b
+        n = n + 1
+    return 'done'
+#
+print(next(fibG(2)))
+print(next(fibG(2)))
+print(next(fibG(2)))
+print(next(fibG(2)))
+print(next(fibG(2)))
+# 这里，最难理解的就是generator和函数的执行流程不一样。函数是顺序执行，遇
+# 到 return  语句或者最后一行函数语句就返回。而变成generator的函数，在每次
+# 调用 next()  的时候执行，遇到 yield  语句返回，再次执行时从上次返回
+# 的 yield  语句处继续执行。
 
 
 
